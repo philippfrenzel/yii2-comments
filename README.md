@@ -14,13 +14,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist spanjeta/yii2-comments "*"
+php composer.phar require --prefer-dist philippfrenzel/yii2-comments "*"
 ```
 
 or add
 
 ```
-"spanjeta/yii2-comments": "*"
+"philippfrenzel/yii2-comments": "*"
 ```
 
 to the require section of your `composer.json` file.
@@ -32,11 +32,11 @@ Usage
 Once the extension is installed, use mitration to install table
 
 ```
-yii migrate/up --migrationPath=@spanjeta/comments/migrations
+yii migrate/up --migrationPath=@philippfrenzel/comments/migrations
 ```
 
 
 simply use it in your code by  :
 
 ```php
-<?=   \spanjeta\comments\CommentsWidget::widget(['model'=>$model]); ?>```
+<?=   \philippfrenzel\comments\CommentsWidget::widget(['model'=>$model]); ?>```

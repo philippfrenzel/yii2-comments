@@ -1,5 +1,5 @@
 {
-    "name": "spanjeta/yii2-comments",
+    "name": "philippfrenzel/yii2-comments",
     "description": "Comments Widget adds comment box for any view",
     "type": "yii2-extension",
     "keywords": ["yii2","extension","comments"],
@@ -8,6 +8,10 @@
         {
             "name": "Shiv Charan Panjeta",
             "email": "shivcharan.panjeta@gmail.com"
+        },
+        {
+            "name": "Philipp Frenzel",
+            "email": "philipp@frenzel.net"
         }
     ],
     "require": {
@@ -15,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "spanjeta\\comments\\": ""
+            "philippfrenzel\\comments\\": ""
         }
     }
 

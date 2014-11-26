@@ -5,11 +5,14 @@
  * Author : Shiv Charan Panjeta < shiv@toxsl.com >
  */
 
-namespace spanjeta\comments\models;
+namespace philippfrenzel\comments\models;
 
 use Yii;
 use yii\components;
+
 use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
+
 use app\models\User;
 
 /**
@@ -25,7 +28,20 @@ use app\models\User;
 */
 class Comment extends ActiveRecord
 {
+	/**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
 
+	/**
+	 * [__toString description]
+	 * @return string [description]
+	 */
 	public  function __toString()
 	{
 		return (string)$this->model_type;
@@ -34,17 +50,32 @@ class Comment extends ActiveRecord
 	const STATUS_PUBLISHED 	= 1;
 	const STATUS_ARCHIEVED 	= 2;
 	
+	/**
+	 * [getStateOptions description]
+	 * @param  [type] $id [description]
+	 * @return [type]     [description]
+	 */
 	public static function getStateOptions($id = null)
 	{
 		$list = array(
-				self::STATUS_DRAFT 			=> "Draft",
-				self::STATUS_PUBLISHED 		=> "Published" ,
-				self::STATUS_ARCHIEVED 		=> "Archieved",
+			self::STATUS_DRAFT 			=> "Draft",
+			self::STATUS_PUBLISHED 		=> "Published" ,
+			self::STATUS_ARCHIEVED 		=> "Archieved",
 		);
-		if ($id == null )	return $list;
-		if ( is_numeric( $id )) return $list [ $id % count($list) ];
+		
+		if ($id == null )
+			return $list;
+		
+		if ( is_numeric( $id )) 
+			return $list [ $id % count($list) ];
+		
 		return $id;
 	}
+
+	/**
+	 * [getStateBadge description]
+	 * @return [type] [description]
+	 */
 	public function getStateBadge()
 	{
 		$list = array(
@@ -55,17 +86,19 @@ class Comment extends ActiveRecord
 		//return \yii\helpers\Html::tag('span', self::getStateOptions( $this->state_id), ['class' => 'badge vd_bg-' . $list[$this->state_id]]);
 		return \yii\helpers\Html::tag('span', self::getStateOptions( $this->state_id), ['class' => 'label label-' . $list[$this->state_id]]);
 	}
+
+	/**
+	 * [beforeValidate description]
+	 * @return [type] [description]
+	 */
 	public function beforeValidate()
 	{
 		if($this->isNewRecord)
 		{
-				if ( !isset( $this->create_time )) $this->create_time = date( 'Y-m-d H:i:s');
-				if ( !isset( $this->create_user_id )) $this->create_user_id = Yii::$app->user->id;
-			}else{
-				}
+			if ( !isset( $this->create_user_id )) $this->create_user_id = Yii::$app->user->id;
+		}
 		return parent::beforeValidate();
 	}
-
 
 	/**
 	* @inheritdoc
@@ -82,9 +115,8 @@ class Comment extends ActiveRecord
 	{
 		return [
             [['model_type', 'model_id'], 'required'],
-            [['model_id', 'state_id', 'create_user_id'], 'integer'],
+            [['model_id', 'state_id', 'create_user_id','created_at','updated_at','deleted_at'], 'integer'],
             [['comment'], 'string'],
-            [['create_time'], 'safe'],
             [['model_type'], 'string', 'max' => 128]
         ];
 	}
@@ -95,14 +127,16 @@ class Comment extends ActiveRecord
 	public function attributeLabels()
 	{
 		return [
-				    'id' => Yii::t('app', 'ID'),
-				    'model_type' => Yii::t('app', 'Model Type'),
-				    'model_id' => Yii::t('app', 'Model ID'),
-				    'comment' => Yii::t('app', 'Comment'),
-				    'state_id' => Yii::t('app', 'State ID'),
-				    'create_time' => Yii::t('app', 'Create Time'),
-				    'create_user_id' => Yii::t('app', 'Create User ID'),
-				];
+		    'id' => Yii::t('app', 'ID'),
+		    'model_type' => Yii::t('app', 'Model Type'),
+		    'model_id' => Yii::t('app', 'Model ID'),
+		    'comment' => Yii::t('app', 'Comment'),
+		    'state_id' => Yii::t('app', 'State ID'),
+		    'created_at' => Yii::t('app', 'Create Time'),
+		    'updated_at' => Yii::t('app', 'Update Time'),
+		    'deleted_at' => Yii::t('app', 'Delete Time'),
+		    'create_user_id' => Yii::t('app', 'Create User ID'),
+		];
 	}
 	
 	/**
@@ -113,9 +147,4 @@ class Comment extends ActiveRecord
 	    return $this->hasOne(User::className(), ['id' => 'create_user_id']);
 	}
 	
-    public static function getRelations()
-    {
-    	$relations = [];
-		return $relations;
-	}
 }

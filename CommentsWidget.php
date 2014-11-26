@@ -1,7 +1,7 @@
 <?php
-namespace spanjeta\comments;
+namespace philippfrenzel\comments;
 
-use spanjeta\comments\models\Comment;
+use philippfrenzel\comments\models\Comment;
 use yii\data\ActiveDataProvider;
 
 /**
